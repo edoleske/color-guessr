@@ -10,6 +10,7 @@ const colors = Object.entries(htmlColors).map(
 const targetSwatch = ref<HTMLDivElement | null>(null);
 const target = ref<Color>(colors[0]);
 const picked = ref<string>("#000000");
+const hideSwatch = ref<boolean>(true);
 
 const getRandomColor = () => {
 	const index = Math.floor(Math.random() * colors.length);
@@ -50,7 +51,11 @@ onMounted(() => {
   <h1 class="text-2xl pb-4">ColorGuessr</h1>
   <p class="text-center">Welcome! Pick the color that matches as closely as possible to the HTML color chosen at random.</p>
   <div class="py-8 w-fit m-auto space-y-4">
-    <div class="size-32 bg-gray-500" ref="targetSwatch"></div>
+    <div class="size-32" :class="{ 'bg-undefined': hideSwatch }" ref="targetSwatch"></div>
+    <label>
+      Hide Color: 
+      <input type="checkbox" v-model="hideSwatch">
+    </label>
     <p>Current color is {{ target.hex }}, picked color is {{ picked }} (Distance: {{ Math.floor(target.weightedDistance(picked) ?? 1000) }})</p>
     <form @submit.prevent="submitColor" class="flex flex-col gap-4">
       <label>
