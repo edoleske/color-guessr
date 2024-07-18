@@ -45,7 +45,7 @@ const reset = () => {
 };
 
 onMounted(() => {
-	pickNewColor();
+	reset();
 });
 </script>
 
