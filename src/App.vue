@@ -23,8 +23,8 @@ const pickNewColor = () => {
 };
 
 const getScore = () => {
-	const distance = target.value.weightedDistance(picked.value);
-	return Math.floor((65025 - distance) / 650);
+	const distance = target.value.distanceCIELAB(picked.value);
+	return Math.max(Math.floor((2000 - distance) / 20), 0);
 };
 
 const submitColor = () => {
@@ -51,25 +51,30 @@ onMounted(() => {
 
 <template>
   <h1 class="text-2xl pb-4">ColorGuessr</h1>
-  <p class="text-center">Welcome! Pick the color that matches as closely as possible to the HTML color chosen at random.</p>
+  <p class="text-center">
+    Welcome! Pick the color that matches as closely as possible to the HTML color chosen at random.
+  </p>
   <div class="py-8 w-fit m-auto space-y-4">
-    <TargetColor :target="target" :game-over="gameOver" />
-    <div>
-      <p>Your Pick:</p>
-      <div class="size-32" :style="{ 'background-color': picked }"></div>
+    <div class="grid grid-cols-2 justify-center">
+      <TargetColor :target="target" :game-over="gameOver" />
+      <div>
+        <p class="text-right italic invisible sm:visible">Input</p>
+        <div class="w-full h-32" :style="{ 'background-color': picked }"></div>
+      </div>
     </div>
+    <p>Target color is <span class="font-mono uppercase">{{ gameOver ? target.hex : '#??????' }}</span>, picked color is <span class="font-mono uppercase">{{ picked }}</span></p>
     <div v-if="gameOver" class="flex flex-col justify-center items-center gap-4">
-      <p>Target color was {{ target.hex }}, picked color was {{ picked }}</p>
-      <p>Score: <b>{{ score }}/100</b></p>
+      <p>
+        Score: <b>{{ score }}/100</b>
+      </p>
       <button type="button" @click="reset" class="button">Play Again</button>
     </div>
-    <form v-if="!gameOver" @submit.prevent="submitColor" class="flex flex-col gap-4">
+    <form v-if="!gameOver" @submit.prevent="submitColor" class="flex flex-col gap-4 items-center">
       <label>
-      Your Color: 
-      <input type="color" v-model="picked">
-    </label>
-    <button type="submit" class="button">Submit</button>
+        Click to pick color:
+        <input type="color" class="ml-1" v-model="picked" />
+      </label>
+      <button type="submit" class="button">Submit</button>
     </form>
   </div>
-  
 </template>

@@ -8,6 +8,8 @@ const props = defineProps<{
 </script>
 
 <template>
-  <p><b>{{ target.name }}</b></p>
-  <div class="size-32" :class="{ 'bg-undefined': !props.gameOver }" :style="{ 'background-color': target.hex }"></div>
+  <div>
+    <p><b>{{ target.name }}</b></p>
+  <div class="w-full h-32" :class="{ 'bg-undefined': !props.gameOver }" :style="{ 'background-color': target.hex }"></div>
+  </div>
 </template>
